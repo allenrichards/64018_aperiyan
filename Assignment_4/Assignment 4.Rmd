@@ -1,0 +1,74 @@
+---
+title: "QM ASSIGNMENT_M9 Goal Programming"
+author: "ALLEN RICHARDS"
+date: "2023-11-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Problem Statement : 
+    The Research and Development Division of the Emax Corporation has developed three new
+products. A decision now needs to be made on which mix of these products should be produced.
+Management wants primary consideration given to three factors: total profit, stability in the
+workforce, and achieving an increase in the company’s earnings next year from the $75 million
+achieved this year. In particular, using the units given in the following table, they want to
+Maximize Z = P - 6C - 3D, where
+P = total (discounted) profit over the life of the new products,
+C = change (in either direction) in the current level of employment,
+D = decrease (if any) in next year’s earnings from the current year’s level.
+The amount of any increase in earnings does not enter into Z, because management is concerned
+primarily with just achieving some increase to keep the stockholders happy. (It has mixed
+feelings about a large increase that then would be difficult to surpass in subsequent years.)
+
+
+# Summary : As per my observation this goal programming approach takes into account specific objectives and constraints related to workforce stability and earnings growth, making it easier to analyze production decisions in a systematic way and the company's target function is to generate a profit of 225 million dollars, which is its objective function.
+
+          (a) To use the combination the company must combine X1,X2 and X3 The company's sole product, Product 3, can only be produced in 15 units in order to maximize profit. But X3 altered
+          (b) The firm had 2,500 extra workers in this instance, despite the fact that employee levels would be stabilized at a maximum of 50,000 workers (x1p). A penalty for the overage would have to be paid.
+          (c) The earnings of the following year are evaluated in relation to the current level as a result of y2p and y2m; in this instance, the current level is interpreted as "0," meaning that the earnings of the following year do not differ from those of the current year. 
+
+```{r}
+library(lpSolveAPI)
+```
+
+
+```{r}
+g <- read.lp("D:/KSU SEM-1/QUANTITATIVE MANAGEMENT/LP FILES/Goal Programming.lp")
+g
+
+
+# The required factors and these terms are used to measure departures from predetermined targets concerning employment and earnings for the following year. 
+                         
+```
+
+## Solve
+```{r}
+solve(g)
+get.objective(g)
+get.variables(g)
+get.constraints(g)
+```
+
+```{r}
+# Create the matrix
+g_tab <- matrix(c("Total Profit", "Employment Level", "Earnings Next Year", 
+                  20, 6, 8,
+                  15, 4, 7,
+                  25, 5, 5,
+"Maximize", "=50", ">=75",
+"Millions of Dollars", "Hundreds of Employees", "Millions of Dollars"), ncol = 6, byrow = FALSE)
+
+
+# Set column names
+colnames(g_tab) <- c("Factor", "Product 1", "Product 2", "Product 3", "Goal", "Units")
+as.table(g_tab)
+
+```
+
+
+```{r}
+get.sensitivity.rhs(g)
+get.sensitivity.objex(g)
+```
